@@ -80,8 +80,11 @@ app.post('/api/contact', (req, res) => {
   }
 });
 
-// Start the server
-app.listen(5000, () => {
-  console.log('Server running on http://localhost:5000');
-  console.log('CORS enabled for localhost:5500 and 127.0.0.1:5500');
+// Listen on the port provided by Vercel
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });
+
+// Export the app for Vercel
+module.exports = app;
