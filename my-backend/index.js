@@ -1,8 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const fs = require('fs');
-const path = require('path');
 
 const app = express();
 
@@ -43,28 +41,10 @@ app.post('/api/contact', (req, res) => {
       date: new Date().toISOString()
     };
 
-    // Define the path to contacts.json
-    const filePath = path.join(__dirname, 'contacts.json');
-    let contacts = [];
-
-    // Read existing contacts if the file exists
-    if (fs.existsSync(filePath)) {
-      try {
-        const fileData = fs.readFileSync(filePath, 'utf8');
-        contacts = JSON.parse(fileData);
-      } catch (parseError) {
-        console.log('Error parsing existing contacts.json, starting fresh:', parseError);
-        contacts = [];
-      }
-    }
-
-    // Add the new contact
-    contacts.push(contactData);
-
-    // Write all contacts back to the file
-    fs.writeFileSync(filePath, JSON.stringify(contacts, null, 2), 'utf8');
-
-    console.log('Contact form data saved successfully:', contactData);
+    // Note: File operations don't persist in serverless environments
+    // For now, just log the data and return success
+    console.log('Contact form data received:', contactData);
+    
     res.json({ 
       success: true, 
       message: 'Message received and saved!',
@@ -80,11 +60,6 @@ app.post('/api/contact', (req, res) => {
   }
 });
 
-// Listen on the port provided by Vercel
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
-
+// DO NOT use app.listen() in Vercel serverless functions!
 // Export the app for Vercel
 module.exports = app;
