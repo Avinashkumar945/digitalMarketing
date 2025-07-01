@@ -774,10 +774,10 @@
     const message = document.getElementById('message').value.trim();
 
     try {
-        const response = await fetch('https://digital-marketing-uqzg.vercel.app/', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ name, email, message })
+        const response = await fetch('https://digital-marketing-uqzg.vercel.app/api/contact', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({ name, email, message })
         });
 
         const result = await response.json();
