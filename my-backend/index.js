@@ -4,15 +4,14 @@ const cors = require('cors');
 
 const app = express();
 
-// Enhanced CORS configuration - ADD YOUR GITHUB PAGES DOMAIN
+// Fixed CORS configuration - removed credentials
 app.use(cors({
   origin: [
     'http://localhost:5500', 
     'http://127.0.0.1:5500', 
     'http://localhost:3000',
-    'https://avinashkumar945.github.io'  // ← ADD THIS LINE
-  ],
-  credentials: true
+    'https://avinashkumar945.github.io'
+  ]
 }));
 
 app.use(bodyParser.json());
@@ -29,7 +28,6 @@ app.post('/api/contact', (req, res) => {
     
     const { name, email, message } = req.body;
 
-    // Validate input
     if (!name || !email || !message) {
       console.log('Validation failed: Missing fields');
       return res.status(400).json({ 
@@ -38,7 +36,6 @@ app.post('/api/contact', (req, res) => {
       });
     }
 
-    // Prepare the contact data object
     const contactData = {
       name: name.trim(),
       email: email.trim(),
@@ -46,8 +43,6 @@ app.post('/api/contact', (req, res) => {
       date: new Date().toISOString()
     };
 
-    // Note: File operations don't persist in serverless environments
-    // For now, just log the data and return success
     console.log('Contact form data received:', contactData);
     
     res.json({ 
@@ -65,5 +60,4 @@ app.post('/api/contact', (req, res) => {
   }
 });
 
-// Export the app for Vercel
 module.exports = app;
