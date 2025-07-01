@@ -1,64 +1,43 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const cors = require('cors');
+export default function handler(req, res) {
+    if (req.method === 'POST') {
+        try {
+            console.log('Received request body:', req.body);
 
-const app = express();
+            const { name, email, message } = req.body;
 
-// Fixed CORS configuration - removed credentials
-app.use(cors({
-  origin: [
-    'http://localhost:5500', 
-    'http://127.0.0.1:5500', 
-    'http://localhost:3000',
-    'https://avinashkumar945.github.io'
-  ]
-}));
+            // Validation
+            if (!name || !email || !message) {
+                console.log('Validation failed: Missing fields');
+                return res.status(400).json({
+                    success: false,
+                    message: 'All fields are required.'
+                });
+            }
 
-app.options('*', cors());
-app.use(bodyParser.json());
+            const contactData = {
+                name: name.trim(),
+                email: email.trim(),
+                message: message.trim(),
+                date: new Date().toISOString()
+            };
 
-// Test route
-app.get('/', (req, res) => {
-  res.send('Backend is working!');
-});
+            console.log('Contact form data received:', contactData);
 
-// Contact form endpoint
-app.post('/api/contact', (req, res) => {
-  try {
-    console.log('Received request body:', req.body);
-    
-    const { name, email, message } = req.body;
+            return res.status(200).json({
+                success: true,
+                message: 'Message received and saved!',
+                data: contactData
+            });
 
-    if (!name || !email || !message) {
-      console.log('Validation failed: Missing fields');
-      return res.status(400).json({ 
-        success: false, 
-        message: 'All fields are required.' 
-      });
+        } catch (error) {
+            console.error('Error in /api/contact endpoint:', error);
+            return res.status(500).json({
+                success: false,
+                message: 'Internal server error. Please try again later.'
+            });
+        }
+    } else {
+        res.setHeader('Allow', ['POST']);
+        res.status(405).json({ message: `Method ${req.method} not allowed.` });
     }
-
-    const contactData = {
-      name: name.trim(),
-      email: email.trim(),
-      message: message.trim(),
-      date: new Date().toISOString()
-    };
-
-    console.log('Contact form data received:', contactData);
-    
-    res.json({ 
-      success: true, 
-      message: 'Message received and saved!',
-      data: contactData
-    });
-
-  } catch (error) {
-    console.error('Error in /api/contact endpoint:', error);
-    res.status(500).json({ 
-      success: false, 
-      message: 'Internal server error. Please try again later.' 
-    });
-  }
-});
-
-module.exports = app;
+}
