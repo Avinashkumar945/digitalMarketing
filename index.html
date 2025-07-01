@@ -434,6 +434,72 @@
                 transform: rotate(-45deg) translate(7px, -6px);
             }
         }
+
+        /* Mobile devices (600px and down) */
+     @media (max-width: 600px) {
+  .header-container {
+    flex-direction: row;
+    align-items: flex-start;
+    position: relative;
+  }
+  .logo {
+    flex: 1;
+    margin-bottom: 0;
+    font-size: 1.2rem;
+  }
+  .btn.primary-btn {
+    position: absolute;
+    top: 55px; /* below the header bar */
+    right: 5px;
+    width: calc(100vw - 32px);
+    max-width: 95vw;
+    font-size: 1rem;
+    padding: 12px 0;
+    z-index: 1010;
+    text-align: center;
+    display: block;
+    box-shadow: 0 4px 16px rgba(26,115,232,0.08);
+  }
+  .hamburger {
+    display: block;
+    margin-left: 12px;
+    margin-top: 4px;
+    z-index: 1020;
+  }
+  nav {
+    flex: none;
+  }
+}
+
+
+/* Tablets and small laptops (601px to 1024px) */
+@media only screen and (min-width: 601px) and (max-width: 1024px) {
+    .hero-container {
+        flex-direction: row;
+        padding: 40px;
+    }
+    .services-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .footer-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* Larger laptops and desktops (1025px and up) */
+@media only screen and (min-width: 1025px) {
+    .hero-container {
+        flex-direction: row;
+        padding: 60px;
+    }
+    .services-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    .footer-container {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
     </style>
 </head>
 <body>
