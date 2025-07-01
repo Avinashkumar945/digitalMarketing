@@ -4,9 +4,14 @@ const cors = require('cors');
 
 const app = express();
 
-// Enhanced CORS configuration
+// Enhanced CORS configuration - ADD YOUR GITHUB PAGES DOMAIN
 app.use(cors({
-  origin: ['http://localhost:5500', 'http://127.0.0.1:5500', 'http://localhost:3000'],
+  origin: [
+    'http://localhost:5500', 
+    'http://127.0.0.1:5500', 
+    'http://localhost:3000',
+    'https://avinashkumar945.github.io'  // ← ADD THIS LINE
+  ],
   credentials: true
 }));
 
@@ -60,6 +65,5 @@ app.post('/api/contact', (req, res) => {
   }
 });
 
-// DO NOT use app.listen() in Vercel serverless functions!
 // Export the app for Vercel
 module.exports = app;

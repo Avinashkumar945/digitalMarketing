@@ -768,25 +768,30 @@
 
         // Contact Form Submission (Only ONE handler!)
         document.querySelector('.contact-form form').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            const name = document.getElementById('name').value.trim();
-            const email = document.getElementById('email').value.trim();
-            const message = document.getElementById('message').value.trim();
+    e.preventDefault();
+    const name = document.getElementById('name').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const message = document.getElementById('message').value.trim();
 
-            const response = await fetch('http://localhost:5000/api/contact', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ name, email, message })
-            });
-
-            const result = await response.json();
-            if(result.success) {
-                alert('Thank you! Your message has been sent.');
-                this.reset();
-            } else {
-                alert(result.message || 'Something went wrong. Please try again.');
-            }
+    try {
+        const response = await fetch('https://digital-marketing-uqzg-nok9sm2gg.vercel.app/api/contact', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name, email, message })
         });
+
+        const result = await response.json();
+        if(result.success) {
+            alert('Thank you! Your message has been sent.');
+            this.reset();
+        } else {
+            alert(result.message || 'Something went wrong. Please try again.');
+        }
+    } catch (err) {
+        alert('Network error: ' + err.message);
+    }
+});
+
 
 
     </script>
