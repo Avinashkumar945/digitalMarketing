@@ -1,3 +1,4 @@
+// server.js
 const express = require('express');
 const cors = require('cors');
 const app = express();
@@ -29,6 +30,8 @@ app.post('/api/contact', (req, res) => {
 
         console.log('Contact form data received:', contactData);
 
+        // TODO: Save contactData to a database or send an email
+
         return res.status(200).json({
             success: true,
             message: 'Message received and saved!',
@@ -44,7 +47,7 @@ app.post('/api/contact', (req, res) => {
     }
 });
 
-// Fallback for non-POST requests
+// Fallback for all other routes/methods
 app.all('*', (req, res) => {
     res.status(405).json({ message: `Method ${req.method} not allowed.` });
 });
