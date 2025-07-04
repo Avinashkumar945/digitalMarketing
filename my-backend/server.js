@@ -1,72 +1,55 @@
-const express = require('express');
-const cors = require('cors');
 const fs = require('fs');
 const path = require('path');
+const express = require('express');
+const cors = require('cors');
+
 const app = express();
 const port = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(express.json());
 
-// Contact form endpoint
+const isProduction = process.env.NODE_ENV === 'production';
+
+// POST contact
 app.post('/api/contact', (req, res) => {
-    const { name, email, message } = req.body;
+  const { name, email, message } = req.body;
 
-    if (!name || !email || !message) {
-        return res.status(400).json({
-            success: false,
-            message: 'All fields are required.'
-        });
+  if (!name || !email || !message) {
+    return res.status(400).json({ success: false, message: 'All fields are required.' });
+  }
+
+  const newContact = {
+    name: name.trim(),
+    email: email.trim(),
+    message: message.trim(),
+    date: new Date().toISOString()
+  };
+
+  if (!isProduction) {
+    // Save to contacts.json locally
+    const contactsFile = path.join(__dirname, 'contacts.json');
+    let contacts = [];
+
+    if (fs.existsSync(contactsFile)) {
+      contacts = JSON.parse(fs.readFileSync(contactsFile, 'utf8'));
     }
+    contacts.push(newContact);
 
-    const contactData = {
-        name: name.trim(),
-        email: email.trim(),
-        message: message.trim(),
-        date: new Date().toISOString()
-    };
+    fs.writeFileSync(contactsFile, JSON.stringify(contacts, null, 2));
+    console.log('📄 Contact saved locally to contacts.json');
+  } else {
+    // In production, just log (or connect DB here)
+    console.log('🌐 New contact (production):', newContact);
+  }
 
-    console.log('✅ Contact form data received:', contactData);
-
-    // Save to contacts.json if running locally
-    if (process.env.NODE_ENV !== 'production') {
-        const filePath = path.join(__dirname, 'contacts.json');
-
-        let existingContacts = [];
-        if (fs.existsSync(filePath)) {
-            try {
-                const fileContents = fs.readFileSync(filePath, 'utf8');
-                existingContacts = JSON.parse(fileContents);
-            } catch (err) {
-                console.error('⚠️ Could not read contacts.json:', err);
-            }
-        }
-
-        existingContacts.push(contactData);
-
-        try {
-            fs.writeFileSync(filePath, JSON.stringify(existingContacts, null, 2), 'utf8');
-            console.log('📂 Contact saved to contacts.json');
-        } catch (err) {
-            console.error('❌ Failed to save to contacts.json:', err);
-        }
-    } else {
-        console.log('📋 Production mode: Skipping contacts.json save.');
-    }
-
-    return res.status(200).json({
-        success: true,
-        message: '✅ Message received successfully!',
-        data: contactData
-    });
+  return res.status(200).json({
+    success: true,
+    message: '✅ Message received successfully!',
+    data: newContact
+  });
 });
 
-// Fallback route
-app.all('*', (req, res) => {
-    res.status(404).json({ message: 'Route not found.' });
-});
-
-// Start server
 app.listen(port, () => {
-    console.log(`🚀 Server running on http://localhost:${port}`);
+  console.log(`🚀 Server running on http://localhost:${port}`);
 });
