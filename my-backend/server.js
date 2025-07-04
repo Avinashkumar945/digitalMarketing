@@ -3,34 +3,20 @@ const cors = require('cors');
 const app = express();
 const port = process.env.PORT || 3000;
 
-// Replace with your actual frontend URL for production
-const allowedOrigins = [
-  'http://localhost:3000',
-  'https://avinashkumar945.github.io',
-  'https://avinashkumar945.github.io/digitalMarketing/'
-];
-
 // CORS configuration
 app.use(cors({
-  origin: function (origin, callback) {
-    // Allow requests with no origin (like mobile apps or curl requests)
-    if (!origin) return callback(null, true);
-    if (allowedOrigins.includes(origin)) {
-      return callback(null, true);
-    } else {
-      return callback(new Error('Not allowed by CORS'));
-    }
-  },
+  origin: '*', // Allow all origins for testing
   methods: ['GET', 'POST', 'OPTIONS'],
-  allowedHeaders: ['Content-Type'],
-  credentials: false
+  allowedHeaders: ['Content-Type']
 }));
-
-// Handle preflight requests for all routes
-app.options('*', cors());
 
 // Parse JSON bodies
 app.use(express.json());
+
+// Root route
+app.get('/', (req, res) => {
+  res.send('🎉 Backend is live! Use POST /api/contact to submit form data.');
+});
 
 // Contact form endpoint
 app.post('/api/contact', (req, res) => {
@@ -54,18 +40,17 @@ app.post('/api/contact', (req, res) => {
       date: new Date().toISOString()
     };
 
-    console.log('Contact form data received:', contactData);
+    console.log('✅ Contact form data received:', contactData);
 
-    // TODO: Save contactData to a database or send an email
-
+    // Simulate saving the data (or send email)
     return res.status(200).json({
       success: true,
-      message: 'Message received and saved!',
+      message: '✅ Message received successfully!',
       data: contactData
     });
 
   } catch (error) {
-    console.error('Error in /api/contact endpoint:', error);
+    console.error('❌ Error in /api/contact:', error);
     return res.status(500).json({
       success: false,
       message: 'Internal server error. Please try again later.'
@@ -73,11 +58,12 @@ app.post('/api/contact', (req, res) => {
   }
 });
 
-// Fallback for all other routes/methods
+// Fallback route
 app.all('*', (req, res) => {
-  res.status(405).json({ message: `Method ${req.method} not allowed.` });
+  res.status(404).json({ message: 'Route not found.' });
 });
 
+// Start server
 app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
+  console.log(`🚀 Server running on http://localhost:${port}`);
 });

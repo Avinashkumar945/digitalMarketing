@@ -758,7 +758,7 @@
 
     // Smooth scrolling for navigation links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function(e) {
+        anchor.addEventListener('click', function (e) {
             e.preventDefault();
             document.querySelector(this.getAttribute('href')).scrollIntoView({
                 behavior: 'smooth'
@@ -766,32 +766,51 @@
         });
     });
 
-    // Contact Form Submission (Updated Handler)
-    document.querySelector('.contact-form form').addEventListener('submit', async function(e) {
-        e.preventDefault();
-        const name = document.getElementById('name').value.trim();
-        const email = document.getElementById('email').value.trim();
-        const message = document.getElementById('message').value.trim();
-
-        try {
-            const response = await fetch('https://digitalmarketing-oam.onrender.com/api/contact', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ name, email, message })
-});
-
-            const result = await response.json();
-            if(result.success) {
-                alert('Thank you! Your message has been sent.');
-                this.reset();
-            } else {
-                alert(result.message || 'Something went wrong. Please try again.');
-            }
-        } catch (err) {
-            alert('Network error: ' + err.message);
+    // Dynamic backend URL selection
+    function getApiBaseUrl() {
+        const hostname = window.location.hostname;
+        if (hostname === 'localhost' || hostname === '127.0.0.1') {
+            return 'http://localhost:3000'; // Local development server
+        } else {
+            return 'https://digitalmarketing-oaom.onrender.com'; // Deployed backend
         }
-    });
+    }
+
+    const apiBaseUrl = getApiBaseUrl();
+
+    // Contact Form Submission
+    const contactForm = document.querySelector('.contact-form form');
+    if (contactForm) {
+        contactForm.addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            const name = document.getElementById('name').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const message = document.getElementById('message').value.trim();
+
+            try {
+                const response = await fetch(`${apiBaseUrl}/api/contact`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, email, message })
+                });
+
+                const result = await response.json();
+
+                if (response.ok && result.success) {
+                    alert('✅ Thank you! Your message has been sent.');
+                    this.reset();
+                } else {
+                    alert('❌ ' + (result.message || 'Something went wrong. Please try again.'));
+                }
+            } catch (err) {
+                console.error('Fetch error:', err);
+                alert('⚠️ Network error: ' + err.message + '\nIf you are testing locally, ensure your backend is running.');
+            }
+        });
+    }
 </script>
+
 
 </body>
 </html>
