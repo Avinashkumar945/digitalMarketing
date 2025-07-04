@@ -766,19 +766,18 @@
         });
     });
 
-    // Dynamic backend URL selection
+    // ✅ Dynamic backend URL selection
     function getApiBaseUrl() {
         const hostname = window.location.hostname;
         if (hostname === 'localhost' || hostname === '127.0.0.1') {
-            return 'http://localhost:3000'; // Local development server
-        } else {
-            return 'https://digitalmarketing-oaom.onrender.com'; // Deployed backend
+            return 'http://localhost:3000'; // Local backend
         }
+        return 'https://digitalmarketing-oaom.onrender.com'; // Live backend
     }
 
     const apiBaseUrl = getApiBaseUrl();
 
-    // Contact Form Submission
+    // ✅ Contact Form Submission
     const contactForm = document.querySelector('.contact-form form');
     if (contactForm) {
         contactForm.addEventListener('submit', async function (e) {
@@ -792,7 +791,7 @@
                 const response = await fetch(`${apiBaseUrl}/api/contact`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ name, email, message })
+                    body: JSON.stringify({ name, email, message }),
                 });
 
                 const result = await response.json();
@@ -804,8 +803,8 @@
                     alert('❌ ' + (result.message || 'Something went wrong. Please try again.'));
                 }
             } catch (err) {
-                console.error('Fetch error:', err);
-                alert('⚠️ Network error: ' + err.message + '\nIf you are testing locally, ensure your backend is running.');
+                console.error('🌐 Fetch error:', err);
+                alert('⚠️ Network error: ' + err.message + '\nIf testing locally, ensure your backend is running.');
             }
         });
     }
