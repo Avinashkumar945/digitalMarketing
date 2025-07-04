@@ -721,79 +721,76 @@
     </footer>
 
     <!-- JavaScript -->
-    <script src="https://unpkg.com/swiper@8/swiper-bundle.min.js"></script>
-    <script>
-        // Mobile Navigation Toggle
-        const hamburger = document.querySelector('.hamburger');
-        const navLinks = document.querySelector('.nav-links');
+    <!-- ... (rest of your HTML remains unchanged) ... -->
 
-        hamburger.addEventListener('click', () => {
-            hamburger.classList.toggle('active');
-            navLinks.classList.toggle('active');
+<!-- JavaScript -->
+<script src="https://unpkg.com/swiper@8/swiper-bundle.min.js"></script>
+<script>
+    // Mobile Navigation Toggle
+    const hamburger = document.querySelector('.hamburger');
+    const navLinks = document.querySelector('.nav-links');
+
+    hamburger.addEventListener('click', () => {
+        hamburger.classList.toggle('active');
+        navLinks.classList.toggle('active');
+    });
+
+    // Close menu when clicking links
+    document.querySelectorAll('.nav-links a').forEach(link => {
+        link.addEventListener('click', () => {
+            hamburger.classList.remove('active');
+            navLinks.classList.remove('active');
         });
+    });
 
-        // Close menu when clicking links
-        document.querySelectorAll('.nav-links a').forEach(link => {
-            link.addEventListener('click', () => {
-                hamburger.classList.remove('active');
-                navLinks.classList.remove('active');
+    // Initialize Swiper Testimonials
+    const testimonialSwiper = new Swiper('.testimonial-container', {
+        loop: true,
+        autoplay: {
+            delay: 5000,
+            disableOnInteraction: false,
+        },
+        pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+        },
+    });
+
+    // Smooth scrolling for navigation links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+            e.preventDefault();
+            document.querySelector(this.getAttribute('href')).scrollIntoView({
+                behavior: 'smooth'
             });
         });
+    });
 
-        // Initialize Swiper Testimonials
-        const testimonialSwiper = new Swiper('.testimonial-container', {
-            loop: true,
-            autoplay: {
-                delay: 5000,
-                disableOnInteraction: false,
-            },
-            pagination: {
-                el: '.swiper-pagination',
-                clickable: true,
-            },
-        });
+    // Contact Form Submission (Updated Handler)
+    document.querySelector('.contact-form form').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const name = document.getElementById('name').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const message = document.getElementById('message').value.trim();
 
-        // Smooth scrolling for navigation links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
-                e.preventDefault();
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth'
-                });
+        try {
+            const response = await fetch('https://digitalmarketing-oam.onrender.com/api/contact', { 
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, email, message })
             });
-        });
-
-        // Contact Form Submission (Only ONE handler!)
-        document.querySelector('.contact-form form').addEventListener('submit', async function(e) {
-    e.preventDefault();
-    const name = document.getElementById('name').value.trim();
-    const email = document.getElementById('email').value.trim();
-    const message = document.getElementById('message').value.trim();
-
-    try {
-    const response = await fetch('https://digital-marketing-1ih7.vercel.app/api/contact', { 
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ name, email, message })
-});
-
-
-
-
-        const result = await response.json();
-        if(result.success) {
-            alert('Thank you! Your message has been sent.');
-            this.reset();
-        } else {
-            alert(result.message || 'Something went wrong. Please try again.');
+            const result = await response.json();
+            if(result.success) {
+                alert('Thank you! Your message has been sent.');
+                this.reset();
+            } else {
+                alert(result.message || 'Something went wrong. Please try again.');
+            }
+        } catch (err) {
+            alert('Network error: ' + err.message);
         }
-    } catch (err) {
-        alert('Network error: ' + err.message);
-    }
-});
+    });
+</script>
 
-
-
-    </script>
 </body>
 </html>
