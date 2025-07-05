@@ -27,10 +27,12 @@ const pool = new Pool({
   }
 });
 
+/*
 // ✅ TEMP route to initialize the contacts table
+// Commented out after use for security
 app.get('/init-db', async (req, res) => {
   try {
-    await pool.query(`
+    await pool.query(\`
       CREATE TABLE IF NOT EXISTS contacts (
         id SERIAL PRIMARY KEY,
         name VARCHAR(100) NOT NULL,
@@ -38,13 +40,14 @@ app.get('/init-db', async (req, res) => {
         message TEXT NOT NULL,
         date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       );
-    `);
+    \`);
     res.send('✅ Table "contacts" created or already exists.');
   } catch (error) {
     console.error('❌ Error creating table:', error);
     res.status(500).send('❌ Error creating table.');
   }
 });
+*/
 
 // Root route
 app.get('/', (req, res) => {
