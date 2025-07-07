@@ -724,22 +724,26 @@
     <!-- ... (rest of your HTML remains unchanged) ... -->
 
 <!-- JavaScript -->
+
 <script src="https://unpkg.com/swiper@8/swiper-bundle.min.js"></script>
 <script>
-    // Mobile Navigation Toggle
+    // Mobile Navigation Toggle with accessibility
     const hamburger = document.querySelector('.hamburger');
     const navLinks = document.querySelector('.nav-links');
-
+    hamburger.setAttribute('aria-expanded', 'false');
+    hamburger.setAttribute('aria-controls', 'primary-navigation');
     hamburger.addEventListener('click', () => {
+        const expanded = hamburger.getAttribute('aria-expanded') === 'true' || false;
         hamburger.classList.toggle('active');
         navLinks.classList.toggle('active');
+        hamburger.setAttribute('aria-expanded', !expanded);
     });
-
     // Close menu when clicking links
     document.querySelectorAll('.nav-links a').forEach(link => {
         link.addEventListener('click', () => {
             hamburger.classList.remove('active');
             navLinks.classList.remove('active');
+            hamburger.setAttribute('aria-expanded', 'false');
         });
     });
 
@@ -766,7 +770,7 @@
         });
     });
 
-    // ✅ Dynamic backend URL selection
+    // Dynamic backend URL selection
     function getApiBaseUrl() {
         const hostname = window.location.hostname;
         if (hostname === 'localhost' || hostname === '127.0.0.1') {
@@ -774,18 +778,41 @@
         }
         return 'https://digitalmarketing-oaom.onrender.com'; // Live backend
     }
-
     const apiBaseUrl = getApiBaseUrl();
 
-    // ✅ Contact Form Submission
+    // Contact Form Submission with loading state and message display
     const contactForm = document.querySelector('.contact-form form');
     if (contactForm) {
+        // Create a div to show messages
+        const messageDiv = document.createElement('div');
+        contactForm.prepend(messageDiv);
+
         contactForm.addEventListener('submit', async function (e) {
             e.preventDefault();
+            messageDiv.textContent = '';
+            messageDiv.className = '';
 
             const name = document.getElementById('name').value.trim();
             const email = document.getElementById('email').value.trim();
             const message = document.getElementById('message').value.trim();
+
+            // Basic client-side validation
+            if (!name || !email || !message) {
+                messageDiv.textContent = 'Please fill in all fields.';
+                messageDiv.classList.add('form-message', 'error');
+                return;
+            }
+            // Simple email regex validation
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                messageDiv.textContent = 'Please enter a valid email address.';
+                messageDiv.classList.add('form-message', 'error');
+                return;
+            }
+
+            const submitBtn = contactForm.querySelector('button[type="submit"]');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Sending...';
 
             try {
                 const response = await fetch(`${apiBaseUrl}/api/contact`, {
@@ -797,14 +824,20 @@
                 const result = await response.json();
 
                 if (response.ok && result.success) {
-                    alert('✅ Thank you! Your message has been sent.');
-                    this.reset();
+                    messageDiv.textContent = '✅ Thank you! Your message has been sent.';
+                    messageDiv.classList.add('form-message', 'success');
+                    contactForm.reset();
                 } else {
-                    alert('❌ ' + (result.message || 'Something went wrong. Please try again.'));
+                    messageDiv.textContent = '❌ ' + (result.message || 'Something went wrong. Please try again.');
+                    messageDiv.classList.add('form-message', 'error');
                 }
             } catch (err) {
                 console.error('🌐 Fetch error:', err);
-                alert('⚠️ Network error: ' + err.message + '\nIf testing locally, ensure your backend is running.');
+                messageDiv.textContent = '⚠️ Network error: ' + err.message + '\nIf testing locally, ensure your backend is running.';
+                messageDiv.classList.add('form-message', 'error');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Send Message';
             }
         });
     }
