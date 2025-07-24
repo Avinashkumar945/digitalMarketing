@@ -20,27 +20,26 @@ app.use(express.json());
 
 // Session setup
 app.use(session({
-  secret: process.env.SESSION_SECRET,
+  secret: process.env.SESSION_SECRET || 'default_secret',
   resave: false,
   saveUninitialized: false
 }));
 app.use(passport.initialize());
 app.use(passport.session());
 
-// PostgreSQL connection
+// PostgreSQL connection (Render safe)
 const isLocal = (process.env.NODE_ENV !== 'production');
+
 const dbUrl = isLocal
   ? 'postgresql://digitalmarketing_db_user:591N2UNfVlVmspLvJH9suu5E8956dfFp@dpg-d1k494je5dus73e3ets0-a.singapore-postgres.render.com/digitalmarketing_db'
   : 'postgresql://digitalmarketing_db_user:591N2UNfVlVmspLvJH9suu5E8956dfFp@dpg-d1k494je5dus73e3ets0-a/digitalmarketing_db';
 
 const pool = new Pool({
   connectionString: dbUrl,
-  ssl: {
-    rejectUnauthorized: false
-  }
+  ssl: { rejectUnauthorized: false }
 });
 
-// TEMP: create users table
+// 🔧 TEMP: Init users table
 app.get('/init-users', async (req, res) => {
   try {
     await pool.query(`
@@ -57,7 +56,7 @@ app.get('/init-users', async (req, res) => {
   }
 });
 
-// TEMP: create contacts table
+// 🔧 TEMP: Init contacts table
 app.get('/init-contacts', async (req, res) => {
   try {
     await pool.query(`
@@ -76,9 +75,7 @@ app.get('/init-contacts', async (req, res) => {
   }
 });
 
-
-
-// TEMP: Add test user (run once, then remove)
+// 🔧 TEMP: Add test user
 app.get('/add-test-user', async (req, res) => {
   try {
     await pool.query(`
@@ -90,6 +87,17 @@ app.get('/add-test-user', async (req, res) => {
   } catch (err) {
     console.error('❌ Error adding test user:', err);
     res.status(500).send('Error adding test user.');
+  }
+});
+
+// 🧪 Debug DB route
+app.get('/debug-db', async (req, res) => {
+  try {
+    const result = await pool.query('SELECT NOW()');
+    res.send(`✅ DB connected. Time: ${result.rows[0].now}`);
+  } catch (err) {
+    console.error('❌ DB connection failed:', err);
+    res.status(500).send('❌ DB connection failed.');
   }
 });
 
@@ -106,7 +114,6 @@ app.post('/api/contact', async (req, res) => {
       'INSERT INTO contacts (name, email, message, date) VALUES ($1, $2, $3, NOW()) RETURNING *',
       [name.trim(), email.trim(), message.trim()]
     );
-
     res.status(200).json({
       success: true,
       message: '✅ Message saved to database!',
@@ -118,7 +125,7 @@ app.post('/api/contact', async (req, res) => {
   }
 });
 
-// Normal login API
+// Email/password login
 app.post('/api/login', async (req, res) => {
   const { email, password } = req.body;
 
@@ -128,11 +135,9 @@ app.post('/api/login', async (req, res) => {
 
   try {
     const result = await pool.query('SELECT * FROM users WHERE email = $1', [email.trim()]);
-
     if (result.rows.length === 0 || result.rows[0].password !== password.trim()) {
       return res.status(401).json({ success: false, message: 'Invalid email or password.' });
     }
-
     res.status(200).json({ success: true, message: 'Login successful!' });
   } catch (error) {
     console.error('❌ Login error:', error);
@@ -140,7 +145,7 @@ app.post('/api/login', async (req, res) => {
   }
 });
 
-// Google OAuth setup
+// Google OAuth
 passport.serializeUser((user, done) => done(null, user));
 passport.deserializeUser((user, done) => done(null, user));
 
@@ -153,22 +158,23 @@ passport.use(new GoogleStrategy({
   return done(null, profile);
 }));
 
-// Google OAuth routes
 app.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
+
 app.get('/auth/google/callback',
   passport.authenticate('google', {
     failureRedirect: '/login-failed',
     successRedirect: '/login-success'
   })
 );
+
 app.get('/login-success', (req, res) => {
-  res.send(`✅ Google Login successful! Welcome ${req.user.displayName}`);
+  res.send(`✅ Google Login successful! Welcome ${req.user?.displayName || 'user'}`);
 });
 app.get('/login-failed', (req, res) => {
   res.send('❌ Google Login failed.');
 });
 
-// Default & 404
+// Default and fallback routes
 app.get('/', (req, res) => {
   res.send('🎉 Backend is live! POST /api/contact to save data to Postgres.');
 });
