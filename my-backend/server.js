@@ -77,6 +77,7 @@ app.get('/init-contacts', async (req, res) => {
 });
 
 
+
 // TEMP: Add test user (run once, then remove)
 app.get('/add-test-user', async (req, res) => {
   try {
