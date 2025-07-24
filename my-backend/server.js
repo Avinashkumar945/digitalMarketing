@@ -57,6 +57,26 @@ app.get('/init-users', async (req, res) => {
   }
 });
 
+// TEMP: create contacts table
+app.get('/init-contacts', async (req, res) => {
+  try {
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS contacts (
+        id SERIAL PRIMARY KEY,
+        name VARCHAR(100) NOT NULL,
+        email VARCHAR(100) NOT NULL,
+        message TEXT NOT NULL,
+        date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      );
+    `);
+    res.send('✅ Contacts table created or already exists.');
+  } catch (error) {
+    console.error('❌ Error creating contacts table:', error);
+    res.status(500).send('Error creating contacts table.');
+  }
+});
+
+
 // TEMP: Add test user (run once, then remove)
 app.get('/add-test-user', async (req, res) => {
   try {
