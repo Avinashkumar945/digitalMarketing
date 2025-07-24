@@ -27,12 +27,8 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-// PostgreSQL connection (Render safe)
-const isLocal = (process.env.NODE_ENV !== 'production');
-
-const dbUrl = isLocal
-  ? 'postgresql://digitalmarketing_db_user:591N2UNfVlVmspLvJH9suu5E8956dfFp@dpg-d1k494je5dus73e3ets0-a.singapore-postgres.render.com/digitalmarketing_db'
-  : 'postgresql://digitalmarketing_db_user:591N2UNfVlVmspLvJH9suu5E8956dfFp@dpg-d1k494je5dus73e3ets0-a/digitalmarketing_db';
+// ✅ Correct DB connection using environment variable
+const dbUrl = process.env.DATABASE_URL;
 
 const pool = new Pool({
   connectionString: dbUrl,
