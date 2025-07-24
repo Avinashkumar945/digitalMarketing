@@ -631,6 +631,8 @@ footer {
                     </div>
                     <button type="submit" class="btn">Send Message</button>
                 </form>
+                <div id="responseMessage"></div>
+
             </div>
             <div class="contact-info">
                 <div class="contact-item">
@@ -732,135 +734,134 @@ footer {
 </footer>
 
 
-    <!-- JavaScript -->
+ <!-- JavaScript -->
 <script src="https://unpkg.com/swiper@8/swiper-bundle.min.js"></script>
 <script>
-    // Mobile Navigation Toggle with accessibility
-    const hamburger = document.querySelector('.hamburger');
-    const navLinks = document.querySelector('.nav-links');
-    hamburger.setAttribute('aria-expanded', 'false');
-    hamburger.setAttribute('aria-controls', 'primary-navigation');
+  // Mobile Navigation Toggle with accessibility
+  const hamburger = document.querySelector('.hamburger');
+  const navLinks = document.querySelector('.nav-links');
+  hamburger.setAttribute('aria-expanded', 'false');
+  hamburger.setAttribute('aria-controls', 'primary-navigation');
 
-    hamburger.addEventListener('click', () => {
-        const expanded = hamburger.getAttribute('aria-expanded') === 'true' || false;
-        hamburger.classList.toggle('active');
-        navLinks.classList.toggle('active');
-        hamburger.setAttribute('aria-expanded', !expanded);
+  hamburger.addEventListener('click', () => {
+    const expanded = hamburger.getAttribute('aria-expanded') === 'true';
+    hamburger.classList.toggle('active');
+    navLinks.classList.toggle('active');
+    hamburger.setAttribute('aria-expanded', !expanded);
+  });
+
+  // Close mobile menu on link click
+  document.querySelectorAll('.nav-links a').forEach(link => {
+    link.addEventListener('click', () => {
+      hamburger.classList.remove('active');
+      navLinks.classList.remove('active');
+      hamburger.setAttribute('aria-expanded', 'false');
     });
+  });
 
-    // Close menu when clicking links
-    document.querySelectorAll('.nav-links a').forEach(link => {
-        link.addEventListener('click', () => {
-            hamburger.classList.remove('active');
-            navLinks.classList.remove('active');
-            hamburger.setAttribute('aria-expanded', 'false');
+  // Initialize Swiper for Testimonials
+  const testimonialSwiper = new Swiper('.testimonial-container', {
+    loop: true,
+    autoplay: {
+      delay: 5000,
+      disableOnInteraction: false,
+    },
+    pagination: {
+      el: '.swiper-pagination',
+      clickable: true,
+    },
+  });
+
+  // Smooth scrolling for anchor links
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+      e.preventDefault();
+      document.querySelector(this.getAttribute('href')).scrollIntoView({
+        behavior: 'smooth'
+      });
+    });
+  });
+
+  // Dynamic backend URL detection
+  function getApiBaseUrl() {
+    const hostname = window.location.hostname;
+    if (hostname === 'localhost' || hostname === '127.0.0.1') {
+      return 'http://localhost:3000';
+    } else if (hostname.includes('digitalmarketing')) {
+      return 'https://digitalmarketing-oaom.onrender.com';
+    }
+    return 'https://dudetech-api.onrender.com';
+  }
+
+  const apiBaseUrl = getApiBaseUrl();
+
+  // Contact Form Submission
+  const contactForm = document.querySelector('#contactForm');
+  if (contactForm) {
+    const responseDiv = document.getElementById('responseMessage') || document.createElement('div');
+    responseDiv.id = 'responseMessage';
+    responseDiv.classList.add('form-message');
+    contactForm.prepend(responseDiv);
+
+    contactForm.addEventListener('submit', async function (e) {
+      e.preventDefault();
+
+      const name = document.getElementById('name').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const message = document.getElementById('message').value.trim();
+
+      responseDiv.textContent = '';
+      responseDiv.style.color = '';
+
+      // Validation
+      if (!name || !email || !message) {
+        responseDiv.textContent = 'Please fill in all fields.';
+        responseDiv.style.color = 'red';
+        return;
+      }
+
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        responseDiv.textContent = 'Please enter a valid email address.';
+        responseDiv.style.color = 'red';
+        return;
+      }
+
+      const submitBtn = contactForm.querySelector('button[type="submit"]');
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Sending...';
+
+      try {
+        const res = await fetch(`${apiBaseUrl}/api/contact`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ name, email, message })
         });
-    });
 
-    // Initialize Swiper for Testimonials
-    const testimonialSwiper = new Swiper('.testimonial-container', {
-        loop: true,
-        autoplay: {
-            delay: 5000,
-            disableOnInteraction: false,
-        },
-        pagination: {
-            el: '.swiper-pagination',
-            clickable: true,
-        },
-    });
+        const data = await res.json();
 
-    // Smooth scrolling for navigation links
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
-            e.preventDefault();
-            document.querySelector(this.getAttribute('href')).scrollIntoView({
-                behavior: 'smooth'
-            });
-        });
-    });
-
-    // Dynamic backend URL selection
-    function getApiBaseUrl() {
-        const hostname = window.location.hostname;
-        if (hostname === 'localhost' || hostname === '127.0.0.1') {
-            return 'http://localhost:3000'; // Local backend
+        if (res.ok && data.success) {
+          responseDiv.textContent = '✅ Message sent successfully!';
+          responseDiv.style.color = 'green';
+          contactForm.reset();
+        } else {
+          responseDiv.textContent = '❌ ' + (data.message || 'Something went wrong.');
+          responseDiv.style.color = 'red';
         }
-        return 'https://dudetech-api.onrender.com'; // 🟠 DUDETECH live backend
-    }
-    const apiBaseUrl = getApiBaseUrl();
-
-    // Contact Form Submission with loading state and message display
-    const contactForm = document.querySelector('.contact-form form');
-    if (contactForm) {
-        const messageDiv = document.createElement('div');
-        contactForm.prepend(messageDiv);
-
-        contactForm.addEventListener('submit', async function (e) {
-            e.preventDefault();
-            messageDiv.textContent = '';
-            messageDiv.className = '';
-
-            const name = document.getElementById('name').value.trim();
-            const email = document.getElementById('email').value.trim();
-            const message = document.getElementById('message').value.trim();
-
-            // Basic client-side validation
-            if (!name || !email || !message) {
-                messageDiv.textContent = 'Please fill in all fields.';
-                messageDiv.classList.add('form-message', 'error');
-                return;
-            }
-
-            // Simple email regex validation
-            const emailRegex = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;
-            if (!emailRegex.test(email)) {
-                messageDiv.textContent = 'Please enter a valid email address.';
-                messageDiv.classList.add('form-message', 'error');
-                return;
-            }
-
-            const submitBtn = contactForm.querySelector('button[type=\"submit\"]');
-            submitBtn.disabled = true;
-            submitBtn.textContent = 'Sending...';
-
-            try {
-                const response = await fetch(`${apiBaseUrl}/api/contact`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ name, email, message }),
-                });
-
-                const result = await response.json();
-
-                if (response.ok && result.success) {
-                    messageDiv.textContent = '✅ Thank you! Your message has been sent.';
-                    messageDiv.classList.add('form-message', 'success');
-                    contactForm.reset();
-                } else {
-                    messageDiv.textContent = '❌ ' + (result.message || 'Something went wrong. Please try again.');
-                    messageDiv.classList.add('form-message', 'error');
-                }
-            } catch (err) {
-                console.error('🌐 Fetch error:', err);
-                messageDiv.textContent = '⚠️ Network error: ' + err.message + '\\nIf testing locally, ensure your backend is running.';
-                messageDiv.classList.add('form-message', 'error');
-            } finally {
-                submitBtn.disabled = false;
-                submitBtn.textContent = 'Send Message';
-            }
-        });
-    }
-//   window.addEventListener('DOMContentLoaded', () => {
-//     const video = document.querySelector('.hero-video');
-//     if (video) {
-//       video.muted = true;
-//       video.play().catch(err => {
-//         console.warn('Autoplay was prevented. User interaction needed.');
-//       });
-//     }
-//   });
+      } catch (error) {
+        console.error('❌ Error submitting form:', error);
+        responseDiv.textContent = '⚠️ Network error. Please try again later.';
+        responseDiv.style.color = 'red';
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Send Message';
+      }
+    });
+  }
 </script>
+
 
 
 
