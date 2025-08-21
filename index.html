@@ -486,6 +486,174 @@ footer {
 }
 
 
+/* ======== ABOUT SECTION ======== */
+.about {
+    padding: 100px 0;
+    background: var(--background-color);
+}
+
+.about-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 40px;
+    align-items: center;
+}
+
+.about-text h2 {
+    color: var(--primary-color);
+}
+
+.about-text p {
+    color: var(--text-color);
+}
+
+.about-image img {
+    border-radius: 10px;
+    box-shadow: var(--shadow);
+}
+
+/* ======== PORTFOLIO SECTION ======== */
+.portfolio {
+    padding: 100px 0;
+    background: #fdf5ef;
+}
+
+.portfolio-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 20px;
+}
+
+.portfolio-card {
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+}
+
+.portfolio-card:hover {
+    transform: translateY(-6px);
+}
+
+.portfolio-card img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+}
+
+.portfolio-card .portfolio-content {
+    padding: 16px;
+}
+
+/* ======== BLOG SECTION ======== */
+.blog {
+    padding: 100px 0;
+    background: var(--background-color);
+}
+
+.blog-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 24px;
+}
+
+.blog-card {
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+}
+
+.blog-card:hover {
+    transform: translateY(-6px);
+}
+
+.blog-card img {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+}
+
+.blog-card .blog-content {
+    padding: 16px;
+}
+
+/* ======== TEAM SECTION ======== */
+.team {
+    padding: 100px 0;
+    background: var(--background-color);
+}
+
+.team-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 24px;
+}
+
+.team-card {
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: var(--shadow);
+    text-align: center;
+    padding: 20px;
+}
+
+.team-card img {
+    width: 96px;
+    height: 96px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 12px;
+}
+
+.team-card h4 { color: var(--primary-color); }
+.team-card p { color: var(--text-color); font-size: 0.95rem; }
+
+/* ======== PRICING SECTION ======== */
+.pricing {
+    padding: 100px 0;
+    background: #fdf5ef;
+}
+
+.pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 24px;
+}
+
+.pricing-card {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    padding: 24px;
+    border-top: 4px solid var(--primary-color);
+}
+
+.pricing-card h3 { margin-bottom: 6px; }
+.pricing-price { font-size: 1.8rem; font-weight: 700; color: var(--accent-color); margin: 8px 0 16px; }
+.pricing-features { list-style: none; margin: 0 0 16px; padding: 0; }
+.pricing-features li { margin: 6px 0; }
+
+/* ======== CTA BANNER ======== */
+.cta-banner {
+    background: linear-gradient(135deg, var(--accent-color), var(--primary-color));
+    color: #fff;
+    padding: 60px 0;
+    text-align: center;
+}
+
+.cta-banner h2 { color: #fff; margin-bottom: 10px; }
+.cta-banner p { color: #fff; margin-bottom: 20px; }
+
+/* ======== FAQ SECTION ======== */
+.faq { padding: 100px 0; background: var(--background-color); }
+.faq-grid { max-width: 900px; margin: 0 auto; }
+.faq details { background: #fff; border-radius: 8px; box-shadow: var(--shadow); padding: 14px 18px; margin-bottom: 12px; }
+.faq summary { cursor: pointer; font-weight: 600; color: var(--primary-color); }
+.faq p { margin-top: 10px; color: var(--text-color); }
+
     </style>
 </head>
 <body>
@@ -499,8 +667,9 @@ footer {
                 <li><a href="#home">Home</a></li>
                 <li><a href="#about">About</a></li>
                 <li><a href="#services">Services</a></li>
+                <li><a href="#team">Team</a></li>
                 <li><a href="#portfolio">Portfolio</a></li>
-                <li><a href="#blog">Blog</a></li>
+                <li><a href="#pricing">Pricing</a></li>
                 <li><a href="#contact">Contact</a></li>
             </ul>
         </nav>
@@ -536,6 +705,98 @@ footer {
 
 
 
+    <!-- About Section -->
+<section id="about" class="about">
+    <div class="container">
+        <div class="section-title">
+            <h2>About Us</h2>
+            <p>We craft data-driven marketing strategies that deliver measurable results.</p>
+        </div>
+        <div class="about-grid">
+            <div class="about-text">
+                <h2>Clarity in Every Impression</h2>
+                <p>With a multidisciplinary team across SEO, performance marketing, content, and CRM automation, we partner with ambitious brands to scale efficiently. Our focus is on sustainable growth and transparent reporting.</p>
+                <p>From strategy to execution, we align every channel to your business goals and deliver campaigns that move the needle.</p>
+                <a href="#contact" class="btn">Start a Project</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+    <!-- Portfolio Section -->
+<section id="portfolio" class="portfolio">
+    <div class="container">
+        <div class="section-title">
+            <h2>Portfolio</h2>
+            <p>Recent case studies and creative highlights.</p>
+        </div>
+        <div class="portfolio-grid">
+            <div class="portfolio-card">
+                <img src="https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?q=80&w=1200&auto=format&fit=crop" alt="SEO Growth">
+                <div class="portfolio-content">
+                    <h3>SEO Growth Sprint</h3>
+                    <p>+150% organic traffic in 90 days for a SaaS brand.</p>
+                </div>
+            </div>
+            <div class="portfolio-card">
+                <img src="https://images.unsplash.com/photo-1552581234-26160f608093?q=80&w=1200&auto=format&fit=crop" alt="Paid Media">
+                <div class="portfolio-content">
+                    <h3>Paid Media Scale</h3>
+                    <p>3x ROAS across Meta and Google with creative iteration.</p>
+                </div>
+            </div>
+            <div class="portfolio-card">
+                <img src="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=1200&auto=format&fit=crop" alt="Branding">
+                <div class="portfolio-content">
+                    <h3>Brand Identity Refresh</h3>
+                    <p>Unified visual language and messaging for DTC retailer.</p>
+                </div>
+            </div>
+            <div class="portfolio-card">
+                <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=1200&auto=format&fit=crop" alt="CRM Automation">
+                <div class="portfolio-content">
+                    <h3>CRM Automation</h3>
+                    <p>Lifecycle flows that increased LTV by 28% in 6 months.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+    <!-- Blog Section -->
+<section id="blog" class="blog">
+    <div class="container">
+        <div class="section-title">
+            <h2>Insights & Articles</h2>
+            <p>Actionable ideas and updates from our team.</p>
+        </div>
+        <div class="blog-grid">
+            <div class="blog-card">
+                <img src="https://images.unsplash.com/photo-1556157382-97eda2d62296?q=80&w=1200&auto=format&fit=crop" alt="SEO Fundamentals">
+                <div class="blog-content">
+                    <h3>SEO in 2025: What Still Matters</h3>
+                    <p>Core principles and practical tactics to keep winning organic.</p>
+                </div>
+            </div>
+            <div class="blog-card">
+                <img src="https://images.unsplash.com/photo-1518779578993-ec3579fee39f?q=80&w=1200&auto=format&fit=crop" alt="Performance Creative">
+                <div class="blog-content">
+                    <h3>Creative Iteration for ROAS</h3>
+                    <p>How to structure tests and read signals across channels.</p>
+                </div>
+            </div>
+            <div class="blog-card">
+                <img src="https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?q=80&w=1200&auto=format&fit=crop" alt="Email & CRM">
+                <div class="blog-content">
+                    <h3>Lifecycle Email Playbook</h3>
+                    <p>Onboarding, win-backs, and cross-sells that compound growth.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
     <!-- Services Section -->
 <section id="services" class="services">
     <div class="container">
@@ -575,6 +836,120 @@ footer {
                 <p>Design identities that make your brand unforgettable.</p>
             </div>
         </div>
+    </div>
+</section>
+
+
+    <!-- Team Section -->
+<section id="team" class="team">
+    <div class="container">
+        <div class="section-title">
+            <h2>Our Team</h2>
+            <p>Experts across strategy, creative, and performance.</p>
+        </div>
+        <div class="team-grid">
+            <div class="team-card">
+                <img src="https://images.unsplash.com/photo-1544723795-3fb6469f5b39?q=80&w=600&auto=format&fit=crop" alt="Team Member">
+                <h4>Aria Menon</h4>
+                <p>Head of Strategy</p>
+            </div>
+            <div class="team-card">
+                <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=600&auto=format&fit=crop" alt="Team Member">
+                <h4>Rahul Singh</h4>
+                <p>Performance Lead</p>
+            </div>
+            <div class="team-card">
+                <img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?q=80&w=600&auto=format&fit=crop" alt="Team Member">
+                <h4>Sophia Lee</h4>
+                <p>Creative Director</p>
+            </div>
+            <div class="team-card">
+                <img src="https://images.unsplash.com/photo-1542909168-82c3e7fdca5c?q=80&w=600&auto=format&fit=crop" alt="Team Member">
+                <h4>Mohammed Iqbal</h4>
+                <p>CRM & Lifecycle</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+    <!-- Pricing Section -->
+<section id="pricing" class="pricing">
+    <div class="container">
+        <div class="section-title">
+            <h2>Pricing</h2>
+            <p>Flexible plans for different stages of growth.</p>
+        </div>
+        <div class="pricing-grid">
+            <div class="pricing-card">
+                <h3>Starter</h3>
+                <p>Best for new brands</p>
+                <div class="pricing-price">₹24,999/mo</div>
+                <ul class="pricing-features">
+                    <li>SEO essentials</li>
+                    <li>1 channel paid ads</li>
+                    <li>Monthly reporting</li>
+                </ul>
+                <a href="#contact" class="btn">Choose Starter</a>
+            </div>
+            <div class="pricing-card">
+                <h3>Growth</h3>
+                <p>For scaling teams</p>
+                <div class="pricing-price">₹59,999/mo</div>
+                <ul class="pricing-features">
+                    <li>Full-funnel SEO</li>
+                    <li>Multi-channel ads</li>
+                    <li>Bi-weekly reviews</li>
+                </ul>
+                <a href="#contact" class="btn">Choose Growth</a>
+            </div>
+            <div class="pricing-card">
+                <h3>Enterprise</h3>
+                <p>Custom partnerships</p>
+                <div class="pricing-price">Custom</div>
+                <ul class="pricing-features">
+                    <li>Dedicated squad</li>
+                    <li>Advanced analytics</li>
+                    <li>Custom SLAs</li>
+                </ul>
+                <a href="#contact" class="btn">Talk to Sales</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+    <!-- FAQ Section -->
+<section id="faq" class="faq">
+    <div class="container">
+        <div class="section-title">
+            <h2>FAQs</h2>
+            <p>Answers to common questions.</p>
+        </div>
+        <div class="faq-grid">
+            <details>
+                <summary>How long before we see results?</summary>
+                <p>Most engagements see early signals in 4-6 weeks and major lifts by 90 days.</p>
+            </details>
+            <details>
+                <summary>Do you work with our in-house team?</summary>
+                <p>Yes. We integrate with existing teams, workflows, and tools seamlessly.</p>
+            </details>
+            <details>
+                <summary>What is included in reporting?</summary>
+                <p>Clear KPIs, channel performance, learnings, and next actions, delivered monthly.</p>
+            </details>
+        </div>
+    </div>
+</section>
+
+
+    <!-- CTA Banner -->
+<section class="cta-banner">
+    <div class="container">
+        <h2>Ready to grow with A4 DUDETECH?</h2>
+        <p>Book a free strategy call to identify your fastest wins.</p>
+        <a href="#contact" class="btn">Book a Call</a>
     </div>
 </section>
 
@@ -781,85 +1156,7 @@ footer {
       });
     });
   });
-
-  // Dynamic backend URL detection
-  function getApiBaseUrl() {
-    const hostname = window.location.hostname;
-    if (hostname === 'localhost' || hostname === '127.0.0.1') {
-      return 'http://localhost:3000';
-    } else if (hostname.includes('digitalmarketing')) {
-      return 'https://digitalmarketing-oaom.onrender.com';
-    }
-    return 'https://dudetech-api.onrender.com';
-  }
-
-  const apiBaseUrl = getApiBaseUrl();
-
-  // Contact Form Submission
-  const contactForm = document.querySelector('#contactForm');
-  if (contactForm) {
-    const responseDiv = document.getElementById('responseMessage') || document.createElement('div');
-    responseDiv.id = 'responseMessage';
-    responseDiv.classList.add('form-message');
-    contactForm.prepend(responseDiv);
-
-    contactForm.addEventListener('submit', async function (e) {
-      e.preventDefault();
-
-      const name = document.getElementById('name').value.trim();
-      const email = document.getElementById('email').value.trim();
-      const message = document.getElementById('message').value.trim();
-
-      responseDiv.textContent = '';
-      responseDiv.style.color = '';
-
-      // Validation
-      if (!name || !email || !message) {
-        responseDiv.textContent = 'Please fill in all fields.';
-        responseDiv.style.color = 'red';
-        return;
-      }
-
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailRegex.test(email)) {
-        responseDiv.textContent = 'Please enter a valid email address.';
-        responseDiv.style.color = 'red';
-        return;
-      }
-
-      const submitBtn = contactForm.querySelector('button[type="submit"]');
-      submitBtn.disabled = true;
-      submitBtn.textContent = 'Sending...';
-
-      try {
-        const res = await fetch(`${apiBaseUrl}/api/contact`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ name, email, message })
-        });
-
-        const data = await res.json();
-
-        if (res.ok && data.success) {
-          responseDiv.textContent = '✅ Message sent successfully!';
-          responseDiv.style.color = 'green';
-          contactForm.reset();
-        } else {
-          responseDiv.textContent = '❌ ' + (data.message || 'Something went wrong.');
-          responseDiv.style.color = 'red';
-        }
-      } catch (error) {
-        console.error('❌ Error submitting form:', error);
-        responseDiv.textContent = '⚠️ Network error. Please try again later.';
-        responseDiv.style.color = 'red';
-      } finally {
-        submitBtn.disabled = false;
-        submitBtn.textContent = 'Send Message';
-      }
-    });
-  }
+  // Contact form is static in this build; no backend requests are made.
 </script>
 
 

@@ -134,31 +134,9 @@
     <div class="footer">© 2025 Dudetech. All rights reserved.</div>
   </div>
   <script>
-    document.getElementById("loginForm").addEventListener("submit", async function (e) {
+    document.getElementById("loginForm").addEventListener("submit", function (e) {
       e.preventDefault();
-      const email = document.getElementById("email").value;
-      const password = document.getElementById("password").value;
-
-      try {
-        const response = await fetch("http://localhost:3000/api/login", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({ email, password })
-        });
-
-        const result = await response.json();
-
-        if (response.ok) {
-          alert("Login successful!");
-          // window.location.href = "/dashboard"; // Uncomment if needed
-        } else {
-          alert(result.message || "Login failed");
-        }
-      } catch (error) {
-        alert("Error connecting to server");
-      }
+      alert("This is a static demo. No backend requests are made.");
     });
   </script>
 </body>
